@@ -1,4 +1,6 @@
-package mgmt;
+package dbmgmt;
+
+import ui.Tables;
 
 import java.sql.*;
 
@@ -31,13 +33,13 @@ public class DbHandler {
       try {
          Connection connection = DriverManager.getConnection(dbURL, dbUsr, dbPass);
 
-            String showAll = "SELECT * FROM artists";
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(showAll);
-
-            while (result.next()) {
-               System.out.println(result.getString("id") + " " + result.getString("name") + " " + result.getString("lastName") + " " + result.getString("age"));
-            }
+         String showAll = "SELECT * FROM artists";
+         Statement statement = connection.createStatement();
+         ResultSet result = statement.executeQuery(showAll);
+         Tables.TableHeader();
+         while (result.next()) {
+            Tables.printArtist(result.getInt("id"), result.getString("name"), result.getString("lastName"), result.getInt("age"));
+         }
 
             connection.close();
          }
@@ -46,7 +48,7 @@ public class DbHandler {
          }
    }
 
-   public static void updateStringField(int id, String field, String replacement) {
+   public static void updateField(int id, String field, String replacement) {
       try {
          Connection connection = DriverManager.getConnection(dbURL, dbUsr, dbPass);
 
@@ -65,7 +67,7 @@ public class DbHandler {
       }
    }
 
-   public static void updateIntField(int id, String field, int replacement) {
+   public static void updateField(int id, String field, int replacement) {
       try {
          Connection connection = DriverManager.getConnection(dbURL, dbUsr, dbPass);
 
@@ -94,8 +96,9 @@ public class DbHandler {
 
          ResultSet result = statement.executeQuery();
 
+         Tables.TableHeader();
          while (result.next()) {
-            System.out.println(result.getString("id") + " " + result.getString("name") + " " + result.getString("lastName") + " " + result.getString("age"));
+            Tables.printArtist(result.getInt("id"), result.getString("name"), result.getString("lastName"), result.getInt("age"));
          }
          connection.close();
       }
@@ -103,4 +106,20 @@ public class DbHandler {
          e.printStackTrace();
       }
    }
+
+   public static void delete(int id) {
+      try {
+         Connection connection = DriverManager.getConnection(dbURL, dbUsr, dbPass);
+
+         String findId = "DELETE FROM artists WHERE id = ?";
+         PreparedStatement statement = connection.prepareStatement(findId);
+         statement.setInt(1, id);
+
+         statement.executeUpdate();
+      }
+      catch (SQLException e) {
+         e.printStackTrace();
+      }
+   }
+
 }

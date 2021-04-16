@@ -8,6 +8,10 @@ public class Main {
 
       DbHandler.updateStringField(4, "name", "Johansson");
 
+      DbHandler.updateIntField(5, "age", 50);
+
+      DbHandler.findById(3);
+
       DbHandler.showAll();
 
    }

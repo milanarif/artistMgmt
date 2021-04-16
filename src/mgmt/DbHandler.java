@@ -3,9 +3,9 @@ package mgmt;
 import java.sql.*;
 
 public class DbHandler {
-   private static String dbURL = "jdbc:mysql://localhost:3306/artistdb";
-   private static String dbUsr = "root";
-   private static String dbPass = "root";
+   private static final String dbURL = "jdbc:mysql://localhost:3306/artistdb";
+   private static final String dbUsr = "root";
+   private static final String dbPass = "root";
 
    public static void add(Artist artist) {
       try {
@@ -41,10 +41,27 @@ public class DbHandler {
 
             connection.close();
          }
-         catch (SQLException e){
+         catch (SQLException e) {
             e.printStackTrace();
          }
+   }
+
+   public static void updateStringField(int id, String field, String replacement) {
+      try {
+         Connection connection = DriverManager.getConnection(dbURL, dbUsr, dbPass);
+
+         String update = "UPDATE artists SET " + field +" = ? WHERE id = ?";
+
+         PreparedStatement statement = connection.prepareStatement(update);
+         statement.setString(1, replacement);
+         statement.setInt(2, id);
+
+         statement.executeUpdate();
+
+         connection.close();
       }
+      catch (SQLException e) {
+         e.printStackTrace();
+      }
+   }
 }
-
-

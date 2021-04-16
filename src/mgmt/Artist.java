@@ -6,7 +6,6 @@ public class Artist {
    String lastName;
    int age;
 
-
    public Artist(String name, String lastName, int age) {
       this.name = name;
       this.lastName = lastName;
